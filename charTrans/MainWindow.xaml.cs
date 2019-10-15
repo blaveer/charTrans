@@ -10,11 +10,15 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using WinForm=System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace charTrans
 {
@@ -23,9 +27,18 @@ namespace charTrans
     /// </summary>
     public partial class MainWindow : Window
     {
+        private string SSelectPath;
+        private string[] SFileNames;
+        private string SSavePath;
+
         public MainWindow()
         {
             InitializeComponent();
+            SFileNames = null;
+            SSelectPath = "";
+            SSavePath = "";
+            GetFile();
+            
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)     //获取拼音
@@ -135,6 +148,253 @@ namespace charTrans
             //{
             //    this.TB.Text = " " + this.TB.Text; 
             //}
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e)     //打开文件夹的按钮
+        {
+            //OpenFileDialog openFileDialog = new OpenFileDialog();
+            //openFileDialog.Title = "选择数据源文件";
+            //openFileDialog.Filter = "txt文件|*.txt|所有文件|*.*";
+            //openFileDialog.FileName = string.Empty;
+            //openFileDialog.FilterIndex = 1;
+            //openFileDialog.Multiselect = true;  
+            //openFileDialog.RestoreDirectory = true;
+            //openFileDialog.DefaultExt = "txt";
+            //if (openFileDialog.ShowDialog() == false)
+            //{
+            //    return;
+            //}
+            //string []txtFile = openFileDialog.FileNames;
+            WinForm.FolderBrowserDialog dialog = new WinForm.FolderBrowserDialog();
+            WinForm.DialogResult result = dialog.ShowDialog();
+            if (result == WinForm.DialogResult.Cancel)
+            {
+                return;
+            }
+            SSelectPath = dialog.SelectedPath;
+            SFileNames = null;
+            GetFile(SSelectPath);
+        }
+        private void GetFile()
+        {
+            SSelectPath = @"E:\Course\windowsProgramDesign\H\TXT";
+            string[] strNames = Directory.GetFiles(SSelectPath);
+            SFileNames = Directory.GetFiles(SSelectPath);
+            foreach (string s in strNames)
+            {
+                this.FilePath.Items.Add(s);
+            }
+        }
+            
+        private void GetFile(string dir)
+        {
+            string[] strNames = Directory.GetFiles(dir);
+            SFileNames = Directory.GetFiles(SSelectPath);
+            foreach (string s in strNames)
+            {
+                this.FilePath.Items.Add(s);
+            }        
+        }
+
+        private void FilePath_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click_5(object sender, RoutedEventArgs e)  //查找文件
+        {
+            string search = this.STB.Text.Trim();
+            if (search.Equals(""))
+            {
+                return;
+            }
+            this.FilePath.Items.Clear();
+            foreach(string s in SFileNames)
+            {
+                if (Regex.IsMatch(s, search))
+                {
+                    this.FilePath.Items.Add(s);
+                }
+            }
+            
+        }
+
+        private void Button_Click_6(object sender, RoutedEventArgs e)     //添加到目标集中
+        {
+            foreach(string s in this.FilePath.Items)
+            {
+                this.FileFinal.Items.Add(s);
+            }
+        }
+
+        private void Button_Click_7(object sender, RoutedEventArgs e)
+        {
+            this.FileFinal.Items.Clear();
+        }
+
+        private void Button_Click_8(object sender, RoutedEventArgs e)      //打开文件
+        {
+            string path = this.FileFinal.SelectedItem.ToString();
+            //string path = SelectedItems"; //测试一个word文档
+            System.Diagnostics.Process.Start(path);
+        }
+
+        private void Button_Click_9(object sender, RoutedEventArgs e)    //上移
+        {
+            int i = this.FileFinal.Items.Count;
+            if (i == 0)
+            {
+                return;
+            }
+            if (this.FileFinal.SelectedItem == null)
+            {
+                return;
+            }
+            if (this.FileFinal.Items.GetItemAt(0).ToString().Equals(this.FileFinal.SelectedItem.ToString())){
+                return;
+            }
+            string temp = this.FileFinal.SelectedItem.ToString();
+            List<string> tempStringS = new List<string>();
+            int counter = 0;
+            for(; counter < i; counter++)
+            {
+                string s = this.FileFinal.Items.GetItemAt(counter).ToString();
+                if (s.Equals(temp))
+                {
+                    break;
+                }
+            }
+            if (counter == i)
+            {
+                return;
+            }
+            for(int counter1 = 0; counter1 < i; counter1++)
+            {
+                if ((counter1 + 1) == counter)
+                {
+                    tempStringS.Add(this.FileFinal.Items.GetItemAt(counter).ToString());
+                    tempStringS.Add(this.FileFinal.Items.GetItemAt(counter1).ToString());
+                    counter1++;
+                }
+                else
+                {
+                    tempStringS.Add(this.FileFinal.Items.GetItemAt(counter1).ToString());
+                }
+            }
+            this.FileFinal.Items.Clear();
+            foreach(string s in tempStringS)
+            {
+                this.FileFinal.Items.Add(s);
+            }
+            
+        }
+
+        private void Button_Click_10(object sender, RoutedEventArgs e)    //下移
+        {
+            int i = this.FileFinal.Items.Count;
+            if ( i== 0)
+            {
+                return;
+            }
+            if (this.FileFinal.SelectedItem == null)
+            {
+                return;
+            }
+            if (this.FileFinal.Items.GetItemAt(i-1).ToString().Equals(this.FileFinal.SelectedItem.ToString()))
+            {
+                return;
+            }
+
+            string temp = this.FileFinal.SelectedItem.ToString();
+            List<string> tempStringS = new List<string>();
+            int counter = 0;
+            for (; counter < i; counter++)
+            {
+                string s = this.FileFinal.Items.GetItemAt(counter).ToString();
+                if (s.Equals(temp))
+                {
+                    break;
+                }
+            }
+            if (counter == i)
+            {
+                return;
+            }
+            for (int counter1 = 0; counter1 < i; counter1++)
+            {
+                if (counter1 == counter)
+                {
+                    tempStringS.Add(this.FileFinal.Items.GetItemAt(counter+1).ToString());
+                    tempStringS.Add(this.FileFinal.Items.GetItemAt(counter1).ToString());
+                    counter1++;
+                }
+                else
+                {
+                    tempStringS.Add(this.FileFinal.Items.GetItemAt(counter1).ToString());
+                }
+            }
+            this.FileFinal.Items.Clear();
+            foreach (string s in tempStringS)
+            {
+                this.FileFinal.Items.Add(s);
+            }
+        }
+
+        private void Button_Click_11(object sender, RoutedEventArgs e)    //设置合并后的文件的位置
+        {
+            WinForm.FolderBrowserDialog dialog = new WinForm.FolderBrowserDialog();
+            WinForm.DialogResult result = dialog.ShowDialog();
+            if (result == WinForm.DialogResult.Cancel)
+            {
+                return;
+            }
+            SSavePath = dialog.SelectedPath + @"\save.txt";
+        }
+
+        private void Button_Click_12(object sender, RoutedEventArgs e)    //合并文件
+        {
+            if (SSavePath.Equals(""))
+            {
+                MessageBox.Show("请选择输出目录");
+                return;
+            }
+            //= this.ChangeLine.IsChecked;
+            List<string> txt = new List<string>();
+            foreach (string s in this.FileFinal.Items)
+            {
+                if (this.AddName.IsChecked == true)
+                {
+                    txt.Add(s);
+                }
+                using (StreamReader sr = new StreamReader(s, Encoding.Default))
+                {
+                    int lineCount = 0;
+                    while (sr.Peek() > 0)
+                    {
+                        lineCount++;
+                        string temp = sr.ReadLine();
+                        txt.Add(temp);
+                    }
+                }
+                if (this.ChangeLine.IsChecked == true)
+                {
+                    txt.Add("\n");
+                }
+            }
+            using (FileStream fs = new FileStream(SSavePath, FileMode.Create))
+            {
+                using (StreamWriter sw = new StreamWriter(fs, Encoding.Default))
+                {
+                    for (int i = 0; i < txt.Count; i++)
+                    {
+                        sw.WriteLine(txt[i]);
+                    }
+                }
+            }
+            if (this.OpenMergeFile.IsChecked == true)
+            {
+                System.Diagnostics.Process.Start(SSavePath);
+            }
         }
     }
 }

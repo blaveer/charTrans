@@ -6,28 +6,95 @@
         xmlns:local="clr-namespace:charTrans"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid Name="PINYIN">
-        <Label Content="输入汉字" HorizontalAlignment="Left" Margin="133,92,0,0" VerticalAlignment="Top"/>
 
-        <TextBox Name="TB"  HorizontalAlignment="Left" Height="23" Margin="196,92,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" BorderBrush="Black" TextChanged="TB_TextChanged">
-            <TextBox.Resources>
-                <Style TargetType="{x:Type Border}">
-                    <Setter Property="CornerRadius" Value="7"/>
-                    <Setter Property="BorderBrush" Value="#c1d0dc"/>
-                </Style>
-            </TextBox.Resources>
-        </TextBox>
-        <TextBox Name="OUT"  HorizontalAlignment="Left" Height="160" Margin="136,140,0,0" VerticalAlignment="Top" Width="180" BorderBrush="Black">
-            <TextBox.Resources>
-                <Style TargetType="{x:Type Border}">
-                    <Setter Property="CornerRadius" Value="7"/>
-                    <Setter Property="BorderBrush" Value="#c1d0dc"/>
-                </Style>
-            </TextBox.Resources>
-         </TextBox>
-        <Button Content="获得拼音" HorizontalAlignment="Left" Margin="455,90,0,0" VerticalAlignment="Top" Width="75" Height="30" Click="Button_Click"/>
-        <Button Content="转为简体" HorizontalAlignment="Left" Margin="455,150,0,0" VerticalAlignment="Top" Width="75" Height="30" Click="Button_Click_1"/>
-        <Button Content="转为繁体" HorizontalAlignment="Left" Margin="455,210,0,0" VerticalAlignment="Top" Width="75" Height="30" Click="Button_Click_2"/>
-        <Button Content="点击发音" HorizontalAlignment="Left" Margin="455,270,0,0" VerticalAlignment="Top" Width="75" Height="30" Click="Button_Click_3"/>
-    </Grid>
+    <TabControl>
+        <TabItem Header="文字游戏" Width="80">
+
+            <Grid Name="PINYIN">
+                <Label Content="输入汉字" HorizontalAlignment="Left" Margin="133,92,0,0" VerticalAlignment="Top"/>
+
+                <TextBox Name="TB"  HorizontalAlignment="Left" Height="23" Margin="196,92,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" BorderBrush="Black" TextChanged="TB_TextChanged">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="7"/>
+                            <Setter Property="BorderBrush" Value="#c1d0dc"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <TextBox Name="OUT"  HorizontalAlignment="Left" Height="160" Margin="136,140,0,0" VerticalAlignment="Top" Width="180" BorderBrush="Black">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="7"/>
+                            <Setter Property="BorderBrush" Value="#c1d0dc"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <Button Content="获得拼音" HorizontalAlignment="Left" Margin="455,90,0,0" VerticalAlignment="Top" Width="75" Height="30" Click="Button_Click"/>
+                <Button Content="转为简体" HorizontalAlignment="Left" Margin="455,150,0,0" VerticalAlignment="Top" Width="75" Height="30" Click="Button_Click_1"/>
+                <Button Content="转为繁体" HorizontalAlignment="Left" Margin="455,210,0,0" VerticalAlignment="Top" Width="75" Height="30" Click="Button_Click_2"/>
+                <Button Content="点击发音" HorizontalAlignment="Left" Margin="455,270,0,0" VerticalAlignment="Top" Width="75" Height="30" Click="Button_Click_3"/>
+            </Grid>
+        </TabItem>
+        <TabItem Header="文件合并" Width="80">
+            <Grid Name="FILE" Margin="0,-2,0,1.8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="12*"/>
+                    <ColumnDefinition Width="15*"/>
+                    <ColumnDefinition Width="85*"/>
+                    <ColumnDefinition Width="676*"/>
+                </Grid.ColumnDefinitions>
+                <Button Content="选择文件目录" HorizontalAlignment="Left" Margin="10.2,10,0,0" VerticalAlignment="Top" Width="115" Click="Button_Click_4" Grid.ColumnSpan="2" Grid.Column="2"/>
+                <Label Content="文件名字符" HorizontalAlignment="Left" Margin="18.2,45,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2" Width="85" Grid.Column="2"/>
+                <TextBox Name="STB"  Grid.Column="3" HorizontalAlignment="Left" Height="23" Margin="23,45,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="397" TextAlignment="Right">
+                    <TextBox.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="7"/>
+                            <Setter Property="BorderBrush" Value="#c1d0dc"/>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                <Button Content="查找全部文件" Grid.Column="3" HorizontalAlignment="Left" Margin="445,48,0,0" VerticalAlignment="Top" Width="95" Click="Button_Click_5"/>
+                <ListView Name="FilePath" Grid.Column="2" HorizontalAlignment="Left" Height="100" Margin="9.8,77,0,0" VerticalAlignment="Top" Width="615" Grid.ColumnSpan="2">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="文件"   Width="0" x:Name="column">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}" TextAlignment="Center" MinWidth="{Binding Path=ActualWidth,ElementName=column}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <Button Content="添加到目标集中" Grid.Column="2" HorizontalAlignment="Left" Margin="9.8,200,0,0" VerticalAlignment="Top" Width="105" Grid.ColumnSpan="2" Click="Button_Click_6"/>
+                <Button Content="清空目标集" Grid.Column="3" HorizontalAlignment="Left" Margin="50,200,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_7"/>
+                <ListView Name="FileFinal" Grid.Column="2" HorizontalAlignment="Left" Height="100" Margin="9.8,220,0,0" VerticalAlignment="Top" Width="615" Grid.ColumnSpan="2">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header=""   Width="0" x:Name="column1">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}" TextAlignment="Center" MinWidth="{Binding Path=ActualWidth,ElementName=column}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+                <Button Content="上移" Grid.Column="3" HorizontalAlignment="Left" Margin="542,232,0,0" VerticalAlignment="Top" Width="88" Click="Button_Click_9"/>
+                <Button Content="下移" Grid.Column="3" HorizontalAlignment="Left" Margin="542,257,0,0" VerticalAlignment="Top" Width="88" Click="Button_Click_10"/>
+                <Button Content="打开所选文件" Grid.Column="3" HorizontalAlignment="Left" Margin="542,281,0,0" VerticalAlignment="Top" Width="88" Click="Button_Click_8"/>
+                <Button Content="合并文件" Grid.Column="3" HorizontalAlignment="Left" Margin="542,338,0,0" VerticalAlignment="Top" Width="88" Click="Button_Click_12"/>
+                <Button Content="目标文件名" Grid.Column="2" HorizontalAlignment="Left" Margin="9.8,338,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_11"/>
+                <CheckBox Name="ChangeLine" Content="文件合并时添加换行" Grid.Column="2" HorizontalAlignment="Left" Margin="9.8,372,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+                <CheckBox Name="AddName" Content="文件合并时添加文件名" Grid.Column="3" HorizontalAlignment="Right" Margin="0,371,411,0" VerticalAlignment="Top"/>
+                <CheckBox Name="OpenMergeFile" Content="打开合并后的文件" Grid.Column="3" HorizontalAlignment="Left" Margin="320,372,0,0" VerticalAlignment="Top"/>
+
+            </Grid>
+        </TabItem>
+
+    </TabControl>
 </Window>
