@@ -19,6 +19,8 @@ using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.IO;
 using System.Text.RegularExpressions;
+using Fibonacci;
+using System.Runtime.InteropServices;
 
 namespace charTrans
 {
@@ -30,7 +32,10 @@ namespace charTrans
         private string SSelectPath;
         private string[] SFileNames;
         private string SSavePath;
-
+        [DllImport("AT.dll",EntryPoint = "add")]
+        extern static Double add(double a, double b);
+        [DllImport("ADDTIME.dll", EntryPoint = "time")]
+        extern static Double time(double a, double b);
         public MainWindow()
         {
             InitializeComponent();
@@ -41,6 +46,7 @@ namespace charTrans
             
         }
 
+        #region 拼音转换
         private void Button_Click(object sender, RoutedEventArgs e)     //获取拼音
         {
             string text = this.TB.Text.Trim();
@@ -149,7 +155,9 @@ namespace charTrans
             //    this.TB.Text = " " + this.TB.Text; 
             //}
         }
+        #endregion
 
+        #region 文件合并
         private void Button_Click_4(object sender, RoutedEventArgs e)     //打开文件夹的按钮
         {
             //OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -175,7 +183,7 @@ namespace charTrans
             SFileNames = null;
             GetFile(SSelectPath);
         }
-        private void GetFile()
+        private void GetFile()    //测试用函数
         {
             SSelectPath = @"E:\Course\windowsProgramDesign\H\TXT";
             string[] strNames = Directory.GetFiles(SSelectPath);
@@ -394,6 +402,141 @@ namespace charTrans
             if (this.OpenMergeFile.IsChecked == true)
             {
                 System.Diagnostics.Process.Start(SSavePath);
+            }
+        }
+
+        #endregion
+
+        #region DLL使用
+        private void Button_Click_13(object sender, RoutedEventArgs e)   //求阶乘
+        {
+            string s = this.NumGetForF.Text.ToString().Trim();
+            if (s.Equals(""))
+            {
+                return;
+            }
+            else
+            {
+                try
+                {
+                    int f = int.Parse(s);
+                    int result = Fibonacci.Fibonacci.Factorial(f);
+                    this.RESULT.Text = result.ToString();
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show("请输入整数");
+                }
+            }
+        }
+
+        private void Button_Click_14(object sender, RoutedEventArgs e)//求斐波那契
+        {
+            string s = this.NumGetForF.Text.ToString().Trim();
+            if (s.Equals(""))
+            {
+                return;
+            }
+            else
+            {
+                try
+                {
+                    int f = int.Parse(s);
+                    int result = Fibonacci.Fibonacci.SICFibonacci(f);
+                    this.RESULT.Text = result.ToString();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("请输入整数");
+                }
+            }
+        }
+        
+        private void Button_Click_15(object sender, RoutedEventArgs e)   //相加
+        {
+            string num1 = this.NUMONE.Text.ToString().Trim();
+            string num2 = this.NUMTWO.Text.ToString().Trim();
+            if (num1.Equals(""))
+            {
+                MessageBox.Show("请输入第一个运算数");
+                return;
+            }else if (num2.Equals(""))
+            {
+                MessageBox.Show("请输入第二个运算数");
+                return;
+            }
+            try
+            {
+                double d1 = Double.Parse(num1);
+                double d2 = Double.Parse(num2);
+
+                double result = d1 + d2;
+                this.RESULT.Text = result.ToString();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("请输入自然数");
+            }
+
+        }
+
+        private void Button_Click_16(object sender, RoutedEventArgs e)  //相乘
+        {
+            string num1 = this.NUMONE.Text.ToString().Trim();
+            string num2 = this.NUMTWO.Text.ToString().Trim();
+            if (num1.Equals(""))
+            {
+                MessageBox.Show("请输入第一个运算数");
+                return;
+            }
+            else if (num2.Equals(""))
+            {
+                MessageBox.Show("请输入第二个运算数");
+                return;
+            }
+            try
+            {
+                double d1 = Double.Parse(num1);
+                double d2 = Double.Parse(num2);
+                double result = d1 * d2;
+                this.RESULT.Text = result.ToString();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("请输入自然数");
+            }
+
+        }
+        #endregion
+
+        #region 自定义COM的使用
+        #endregion
+
+        private void Button_Click_17(object sender, RoutedEventArgs e)
+        {
+            string s1 = this.ComNumOne.Text.ToString().Trim();
+            string s2 = this.ComNumTwo.Text.ToString().Trim();
+            if (s1.Equals(""))
+            {
+                MessageBox.Show("请输入第一个数");
+                return;
+            }
+            else if (s2.Equals(""))
+            {
+                MessageBox.Show("请输入第二个数");
+                return;
+            }
+            try
+            {
+                int i1 = int.Parse(s1);
+                int i2 = int.Parse(s2);
+                MyCOMTest.IADD cAdd = new MyCOMTest.CADD();
+                int res = cAdd.add(i1, i2);
+                this.ComNumRes.Text = res.ToString();
+            }catch(Exception ex)
+            {
+                MessageBox.Show("请输入整数");
+                return;
             }
         }
     }

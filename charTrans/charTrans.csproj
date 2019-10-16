@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ADDTIME">
+      <HintPath>..\..\..\..\H\DLL\ADDTIME\Debug\ADDTIME.dll</HintPath>
+    </Reference>
     <Reference Include="ChineseConverter">
       <HintPath>..\material\ChineseConverter.dll</HintPath>
     </Reference>
@@ -44,6 +47,13 @@
     <Reference Include="DotNetSpeech">
       <HintPath>..\material\DotNetSpeech.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Fibonacci">
+      <HintPath>..\..\..\..\H\DLL\Fibonacci\Fibonacci\bin\Debug\Fibonacci.dll</HintPath>
+    </Reference>
+    <Reference Include="MyCOMTest, Version=1.0.0.0, Culture=neutral, PublicKeyToken=135f47d89177e72b, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\H\DLL\MyCOMTest\MyCOMTest\bin\Debug\MyCOMTest.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
