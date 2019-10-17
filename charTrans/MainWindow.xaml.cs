@@ -21,6 +21,8 @@ using System.IO;
 using System.Text.RegularExpressions;
 using Fibonacci;
 using System.Runtime.InteropServices;
+using MsWord = Microsoft.Office.Interop.Word;
+using System.Threading;
 
 namespace charTrans
 {
@@ -32,7 +34,7 @@ namespace charTrans
         private string SSelectPath;
         private string[] SFileNames;
         private string SSavePath;
-        [DllImport("AT.dll",EntryPoint = "add")]
+        [DllImport("AT.dll", EntryPoint = "add")]
         extern static Double add(double a, double b);
         [DllImport("ADDTIME.dll", EntryPoint = "time")]
         extern static Double time(double a, double b);
@@ -43,9 +45,10 @@ namespace charTrans
             SSelectPath = "";
             SSavePath = "";
             GetFile();
-            
+            this.Z.Visibility = Visibility.Hidden;
         }
 
+        #region 已完成
         #region 拼音转换
         private void Button_Click(object sender, RoutedEventArgs e)     //获取拼音
         {
@@ -58,7 +61,7 @@ namespace charTrans
             {
                 //for(int i = 0; i < text.Length; i++)
                 //{
-                    
+
                 //}
                 char one_char = text.ToCharArray()[0];
                 int ch_int = (int)one_char;
@@ -68,13 +71,14 @@ namespace charTrans
                     ChineseChar chineseChar = new ChineseChar(one_char);
                     IReadOnlyCollection<string> pinyin = chineseChar.Pinyins;
                     string pin_str = "\n  ";
-                    foreach(string pin in pinyin)
+                    foreach (string pin in pinyin)
                     {
                         pin_str += pin + "\r\n  ";
                     }
                     this.OUT.Text = pin_str;
                 }
-            }catch(Exception e1)
+            }
+            catch (Exception e1)
             {
                 MessageBox.Show("出现错误" + e1.ToString());
             }
@@ -91,11 +95,11 @@ namespace charTrans
             {
                 this.OUT.Text = "\n  " + ChineseConverter.Convert(text, ChineseConversionDirection.TraditionalToSimplified);
             }
-            catch(Exception e1)
+            catch (Exception e1)
             {
                 MessageBox.Show("出现错误" + e1.ToString());
             }
-}
+        }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)      //获得繁体
         {
@@ -113,7 +117,7 @@ namespace charTrans
                 MessageBox.Show("出现错误" + e1.ToString());
             }
         }
-    
+
 
         private void Button_Click_3(object sender, RoutedEventArgs e)    //获得发音
         {
@@ -127,7 +131,8 @@ namespace charTrans
                 SpeechVoiceSpeakFlags spFlags = SpeechVoiceSpeakFlags.SVSFlagsAsync;
                 SpVoice voice = new SpVoice();
                 voice.Speak(text, spFlags);
-            }catch(Exception e1)
+            }
+            catch (Exception e1)
             {
                 MessageBox.Show("发生错误" + e1.ToString());
             }
@@ -193,7 +198,7 @@ namespace charTrans
                 this.FilePath.Items.Add(s);
             }
         }
-            
+
         private void GetFile(string dir)
         {
             string[] strNames = Directory.GetFiles(dir);
@@ -201,7 +206,7 @@ namespace charTrans
             foreach (string s in strNames)
             {
                 this.FilePath.Items.Add(s);
-            }        
+            }
         }
 
         private void FilePath_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -217,19 +222,19 @@ namespace charTrans
                 return;
             }
             this.FilePath.Items.Clear();
-            foreach(string s in SFileNames)
+            foreach (string s in SFileNames)
             {
                 if (Regex.IsMatch(s, search))
                 {
                     this.FilePath.Items.Add(s);
                 }
             }
-            
+
         }
 
         private void Button_Click_6(object sender, RoutedEventArgs e)     //添加到目标集中
         {
-            foreach(string s in this.FilePath.Items)
+            foreach (string s in this.FilePath.Items)
             {
                 this.FileFinal.Items.Add(s);
             }
@@ -258,13 +263,14 @@ namespace charTrans
             {
                 return;
             }
-            if (this.FileFinal.Items.GetItemAt(0).ToString().Equals(this.FileFinal.SelectedItem.ToString())){
+            if (this.FileFinal.Items.GetItemAt(0).ToString().Equals(this.FileFinal.SelectedItem.ToString()))
+            {
                 return;
             }
             string temp = this.FileFinal.SelectedItem.ToString();
             List<string> tempStringS = new List<string>();
             int counter = 0;
-            for(; counter < i; counter++)
+            for (; counter < i; counter++)
             {
                 string s = this.FileFinal.Items.GetItemAt(counter).ToString();
                 if (s.Equals(temp))
@@ -276,7 +282,7 @@ namespace charTrans
             {
                 return;
             }
-            for(int counter1 = 0; counter1 < i; counter1++)
+            for (int counter1 = 0; counter1 < i; counter1++)
             {
                 if ((counter1 + 1) == counter)
                 {
@@ -290,17 +296,17 @@ namespace charTrans
                 }
             }
             this.FileFinal.Items.Clear();
-            foreach(string s in tempStringS)
+            foreach (string s in tempStringS)
             {
                 this.FileFinal.Items.Add(s);
             }
-            
+
         }
 
         private void Button_Click_10(object sender, RoutedEventArgs e)    //下移
         {
             int i = this.FileFinal.Items.Count;
-            if ( i== 0)
+            if (i == 0)
             {
                 return;
             }
@@ -308,7 +314,7 @@ namespace charTrans
             {
                 return;
             }
-            if (this.FileFinal.Items.GetItemAt(i-1).ToString().Equals(this.FileFinal.SelectedItem.ToString()))
+            if (this.FileFinal.Items.GetItemAt(i - 1).ToString().Equals(this.FileFinal.SelectedItem.ToString()))
             {
                 return;
             }
@@ -332,7 +338,7 @@ namespace charTrans
             {
                 if (counter1 == counter)
                 {
-                    tempStringS.Add(this.FileFinal.Items.GetItemAt(counter+1).ToString());
+                    tempStringS.Add(this.FileFinal.Items.GetItemAt(counter + 1).ToString());
                     tempStringS.Add(this.FileFinal.Items.GetItemAt(counter1).ToString());
                     counter1++;
                 }
@@ -423,7 +429,7 @@ namespace charTrans
                     int result = Fibonacci.Fibonacci.Factorial(f);
                     this.RESULT.Text = result.ToString();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     MessageBox.Show("请输入整数");
                 }
@@ -451,7 +457,7 @@ namespace charTrans
                 }
             }
         }
-        
+
         private void Button_Click_15(object sender, RoutedEventArgs e)   //相加
         {
             string num1 = this.NUMONE.Text.ToString().Trim();
@@ -460,7 +466,8 @@ namespace charTrans
             {
                 MessageBox.Show("请输入第一个运算数");
                 return;
-            }else if (num2.Equals(""))
+            }
+            else if (num2.Equals(""))
             {
                 MessageBox.Show("请输入第二个运算数");
                 return;
@@ -473,7 +480,7 @@ namespace charTrans
                 double result = d1 + d2;
                 this.RESULT.Text = result.ToString();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("请输入自然数");
             }
@@ -512,6 +519,7 @@ namespace charTrans
         #region 自定义COM的使用
         #endregion
 
+        #region 自定义COM的使用
         private void Button_Click_17(object sender, RoutedEventArgs e)
         {
             string s1 = this.ComNumOne.Text.ToString().Trim();
@@ -533,11 +541,189 @@ namespace charTrans
                 MyCOMTest.IADD cAdd = new MyCOMTest.CADD();
                 int res = cAdd.add(i1, i2);
                 this.ComNumRes.Text = res.ToString();
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show("请输入整数");
                 return;
             }
         }
+
+        #endregion
+        #endregion
+
+        #region wordCOM组件的使用
+        private void Button_Click_18(object sender, RoutedEventArgs e)
+        {
+            //this.Z.Visibility = Visibility.Visible;
+            changeZ();
+            //while (SV.WorkingWORD)
+            //{
+            //    //Thread.Sleep(100);
+            //}
+            ////this.Z.Visibility = Visibility.Collapsed;
+            //SV.WorkingWORD = true;
+            //MessageBox.Show("sbdjas");
+
+        }
+        private void changeZ()
+        {
+            //Thread.Sleep(1000);
+            Thread t2 = new Thread(useWord);
+            t2.Start();
+            //t2.Join();
+            //this.Z.Visibility = Visibility.Collapsed;
+        }
+        private void useWord()
+        {
+            MsWord.Application oWordApplic;
+            MsWord.Document oDoc;
+            try
+            {
+                //Console.WriteLine("开始了");
+                string doc_file_name = SV.outUrl + @"\content.doc";
+                if (File.Exists(doc_file_name))
+                {
+                    File.Delete(doc_file_name);
+                }
+                oWordApplic = new MsWord.Application();
+                object missing = System.Reflection.Missing.Value;
+
+                //创建小节
+                MsWord.Range curRange;
+                object curTxt;
+                int curSectionNum = 1;
+                oDoc = oWordApplic.Documents.Add(ref missing, ref missing, ref missing, ref missing);
+                oDoc.Activate();
+                //Console.WriteLine("正在生成小节文档");
+                object section_nextPage = MsWord.WdBreakType.wdSectionBreakNextPage;
+                object page_break = MsWord.WdBreakType.wdPageBreak;
+                for (int i = 0; i < 4; i++)
+                {
+                    oDoc.Paragraphs[1].Range.InsertParagraphAfter();
+                    oDoc.Paragraphs[1].Range.InsertBreak(ref section_nextPage);
+                }
+
+                //Console.WriteLine("正在插入摘要内容");
+                #region
+                curSectionNum = 1;
+                curRange = oDoc.Sections[curSectionNum].Range.Paragraphs[1].Range;
+                curRange.Select();
+                string one_str, key_word;
+                StreamReader le_abstract = new StreamReader(SV.basicUrl + @"\abstract.txt");
+                oWordApplic.Options.Overtype = false;
+                MsWord.Selection currentSelection = oWordApplic.Selection;
+                if (currentSelection.Type == MsWord.WdSelectionType.wdSelectionNormal)
+                {
+                    one_str = le_abstract.ReadLine();
+                    currentSelection.TypeText(one_str);
+                    currentSelection.TypeParagraph();
+                    currentSelection.TypeText("摘要");
+                    currentSelection.TypeParagraph();
+                    key_word = le_abstract.ReadLine();
+                    one_str = le_abstract.ReadLine();
+                    while (one_str != null)
+                    {
+                        currentSelection.TypeText(one_str);
+                        currentSelection.TypeParagraph();
+                        one_str = le_abstract.ReadLine();
+                    }
+                    currentSelection.TypeText("关键字:");
+                    currentSelection.TypeText(key_word);
+                    currentSelection.TypeParagraph();
+
+                }
+                le_abstract.Close();
+
+                curRange = oDoc.Sections[curSectionNum].Range.Paragraphs[1].Range;
+                curTxt = curRange.Paragraphs[1].Range.Text;
+                curRange.Font.Name = "宋体";
+                curRange.Font.Size = 22;
+                curRange.Paragraphs[1].Alignment = MsWord.WdParagraphAlignment.wdAlignParagraphCenter;
+                curRange = oDoc.Sections[curSectionNum].Range.Paragraphs[2].Range;
+                curRange.Select();
+                curRange.Paragraphs[1].Alignment = MsWord.WdParagraphAlignment.wdAlignParagraphCenter;
+                curRange.Font.Name = "黑体";
+                curRange.Font.Size = 16;
+                //摘要正文
+                oDoc.Sections[curSectionNum].Range.Paragraphs[1].Alignment = MsWord.WdParagraphAlignment.wdAlignParagraphCenter;
+                for (int i = 3; i < oDoc.Sections[curSectionNum].Range.Paragraphs.Count; i++)
+                {
+                    curRange = oDoc.Sections[curSectionNum].Range.Paragraphs[i].Range;
+                    curTxt = curRange.Paragraphs[1].Range.Text;
+                    curRange.Select();
+                    curRange.Font.Name = "宋体";
+                    curRange.Font.Size = 12;
+                    oDoc.Sections[curSectionNum].Range.Paragraphs[i].LineSpacingRule = MsWord.WdLineSpacing.wdLineSpaceMultiple;
+                    oDoc.Sections[curSectionNum].Range.Paragraphs[i].LineSpacing = 15f;
+                    oDoc.Sections[curSectionNum].Range.Paragraphs[i].IndentFirstLineCharWidth(2);
+
+                }
+                curRange = curRange.Paragraphs[curRange.Paragraphs.Count].Range;
+                curTxt = curRange.Paragraphs[1].Range.Text;
+                object range_start, range_end;
+                range_start = curRange.Start;
+                range_end = curRange.Start + 4;
+                curRange = oDoc.Range(ref range_start, ref range_end);
+                curTxt = curRange.Text;
+                curRange.Select();
+                curRange.Font.Bold = 1;
+                #endregion
+
+
+                //oDoc.Fields[1].Update();
+                #region 
+                //Console.WriteLine("正在保存文档");
+                object file_name;
+                file_name = doc_file_name;
+                oDoc.SaveAs2(ref file_name);
+                oDoc.Close();
+                //Console.WriteLine("正在释放COM资源");
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(oDoc);
+                oDoc = null;
+                oWordApplic.Quit();
+                System.Runtime.InteropServices.Marshal.ReleaseComObject(oWordApplic);
+                oWordApplic = null;
+                #endregion
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            finally
+            {
+                //Console.WriteLine("正在结束word进程");
+                System.Diagnostics.Process[] AllProces = System.Diagnostics.Process.GetProcesses();
+                for (int i = 0; i < AllProces.Length; i++)
+                {
+                    string processName = AllProces[i].ProcessName;
+                    if (String.Compare(processName, "WINWORD") == 0)
+                    {
+                        if (AllProces[i].Responding && !AllProces[i].HasExited)
+                        {
+                            AllProces[i].Kill();
+                        }
+                    }
+
+                }
+                MessageBox.Show("成功了");
+                SV.WorkingWORD = false;
+            }
+            //Console.WriteLine("结束了");
+            //Console.ReadLine();
+        }
+        #endregion
+
+
     }
+
+    #region 自定义常量类
+    class SV
+    {     //放一些静态常量
+        public static string basicUrl = @"E:\Course\windowsProgramDesign\ProjectForHomeWork\Test\ConsoleCom\03_COM_material";
+        public static string outUrl = @"E:\Course\windowsProgramDesign\ProjectForHomeWork\Test\ConsoleCom\out";
+        public static bool WorkingWORD = true;
+    }
+    #endregion
 }
