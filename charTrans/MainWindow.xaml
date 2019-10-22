@@ -98,7 +98,12 @@
         </TabItem>
         <TabItem Header="DLL" Width="80">
             <Grid Name="DLL">
-                <TextBox Name="NumGetForF" TextAlignment="Center" Height="23" TextWrapping="Wrap" Text="" Margin="442,130,52,239.8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="292*"/>
+                    <ColumnDefinition Width="45*"/>
+                    <ColumnDefinition Width="451*"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Name="NumGetForF" TextAlignment="Center" Height="23" TextWrapping="Wrap" Text="" Margin="58,196,436,173.8" Grid.ColumnSpan="3">
 
                     <TextBox.Resources>
                         <Style TargetType="{x:Type Border}">
@@ -107,16 +112,27 @@
                         </Style>
                     </TextBox.Resources>
                 </TextBox>
-                <Button Content="求阶乘" HorizontalAlignment="Left" Margin="442,180,0,0" VerticalAlignment="Top" Width="110" Click="Button_Click_13"/>
-                <Button Content="求斐波那契" HorizontalAlignment="Left" Margin="597,180,0,0" VerticalAlignment="Top" Width="110" Click="Button_Click_14"/>
-                <TextBox Name="RESULT" HorizontalAlignment="Left" Height="23" TextAlignment="Center" Margin="276,325,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="181"/>
+                <Button Content="求阶乘" HorizontalAlignment="Left" Margin="60,242,0,0" VerticalAlignment="Top" Width="110" Click="Button_Click_13"/>
+                <Button Content="求斐波那契" HorizontalAlignment="Left" Margin="238,241,0,0" VerticalAlignment="Top" Width="110" Click="Button_Click_14" Grid.ColumnSpan="3"/>
+                <TextBox Name="RESULT" HorizontalAlignment="Left" Height="23" TextAlignment="Center" Margin="276,325,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="181" Grid.ColumnSpan="3"/>
                 <Label Content="显示运算结果" HorizontalAlignment="Left" Margin="189,323,0,0" VerticalAlignment="Top"/>
-                <TextBox Name="NUMONE" HorizontalAlignment="Left" Height="23" TextAlignment="Center" Margin="57,130,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="90"/>
-                <TextBox Name="NUMTWO" HorizontalAlignment="Left" Height="23" TextAlignment="Center" Margin="189,130,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-                <Label Content="运算数1" HorizontalAlignment="Left" Margin="57,104,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.137,0.594"/>
-                <Label Content="运算数2" HorizontalAlignment="Left" Margin="189,104,0,0" VerticalAlignment="Top"/>
-                <Button Content="二者相加" HorizontalAlignment="Left" Margin="57,204,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_15"/>
-                <Button Content="二者相乘" HorizontalAlignment="Left" Margin="196,204,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_16"/>
+                <TextBox Name="NUMONE" HorizontalAlignment="Left" Height="23" TextAlignment="Center" Margin="57,69,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="90"/>
+                <TextBox Name="NUMTWO" HorizontalAlignment="Left" Height="23" TextAlignment="Center" Margin="189,68,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Grid.ColumnSpan="2"/>
+                <Label Content="运算数1" HorizontalAlignment="Left" Margin="57,43,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.137,0.594"/>
+                <Label Content="运算数2" HorizontalAlignment="Left" Margin="189,43,0,0" VerticalAlignment="Top"/>
+                <Button Content="二者相加" HorizontalAlignment="Left" Margin="57,113,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_15"/>
+                <Button Content="二者相乘" HorizontalAlignment="Left" Margin="196,111,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_16"/>
+                <Button Content="显示反射函数" HorizontalAlignment="Left" Margin="273.2,256,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_19" Grid.Column="2"/>
+                <ListBox Name="DLLMethod" HorizontalAlignment="Left" Height="208" Margin="169.2,24,0,0" VerticalAlignment="Top" Width="225" RenderTransformOrigin="0.5,0.5" Grid.Column="2">
+                    <ListBox.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="-4.981"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </ListBox.RenderTransform>
+                </ListBox>
             </Grid>
         </TabItem>
         <TabItem Header="COM" Width="80">
@@ -133,17 +149,18 @@
                 <StackPanel Name="Z">
                     <myLib:CirclePointRingLoading Width="40" Height="40" IsActive="True" IsLarge="False" Foreground="#3ca9fe" Padding="0,150,0,0"/>
                     <TextBlock Foreground="#787978" FontSize="36" Text="正在运行" Padding="320,180,0,0"/>
+                   
 
                 </StackPanel>
-
+                <Button Content="Button" Margin="112,200,561,128.8" Click="Button_Click_20"/>
 
 
             </Grid>
-            
+
         </TabItem>
         <TabItem Header="进程通信">
             <Grid Name="进程通信">
-                
+
             </Grid>
         </TabItem>
     </TabControl>
